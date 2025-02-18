@@ -50,11 +50,10 @@ public class TaskControl {
         }
     }
 
-    public void addTask(String userResponse) {
+    public void addTask(String userResponse) throws InvalidCommandException {
         // assumed tasks[] has min 1 free slot. exception handling to be added in future update
         if (userResponse.split(" ").length < 2) {
-            System.out.println("Error! Invalid command, please try again!");
-            return;
+            throw new InvalidCommandException(userResponse);
         }
         String taskDetails = userResponse.split(" ", 2)[1];
         String taskType = userResponse.split(" ", 2)[0].toLowerCase();
@@ -88,7 +87,7 @@ public class TaskControl {
             taskCount++;
             System.out.println("You now have " + taskCount + " tasks in the list!");
         } else {
-            System.out.println("Error! Unrecognised task type: " + taskType);
+            throw new InvalidCommandException(userResponse);
         }
     }
 }
