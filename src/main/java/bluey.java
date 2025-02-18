@@ -8,44 +8,49 @@ public class bluey {
         TaskControl taskControl = new TaskControl();
         Scanner in = new Scanner(System.in);
         while (true) {
-            try {
                 String userResponse = in.nextLine().trim();
                 if (userResponse.equals("exit") || userResponse.equals("bye")) {
                     break;
                 }
                 handleResponse(userResponse, taskControl);
-            } catch (InvalidCommandException e) {
-                System.out.println(e.getMessage());
-            }
+//            } catch (InvalidCommandException e) {
+//                System.out.println(e.getMessage());
+////            } catch (ArrayIndexOutOfBoundsException e) {
+//
+//            }
         }
         System.out.println("Goodbye! See you soon :)");
     }
 
-    public static void handleResponse(String userResponse, TaskControl taskControl) throws InvalidCommandException {
+    public static void handleResponse(String userResponse, TaskControl taskControl) {
         String[] words = userResponse.split("\\s+");
         switch (words[0]) {
-//        case "bye":
-//        case "exit":
-//            System.out.println("Bye, see you again soon!");
-//            return;
         case "list":
             taskControl.printList();
             break;
         case "mark":
         case "unmark": // exception handling to be added and reformatted in the future.
-            if (words.length > 2) {
-                System.out.println("Sorry, I don't understand! Please try again with the format \"mark x\" " +
-                        "or \"unmark x\" " + "to mark/unmark task number x!");
-            } else if (words.length == 1) {
-                System.out.println("Sorry, please try again! Do specify a number after \"mark\" or \"unmark\" :)");
-            } else { // to be added: check if words[1] is of type Integer (exception otherwise) and small enough.
-                taskControl.toggleTaskStatus(Integer.parseInt(words[1]), words[0]);
+            try {
+                if (words.length > 2) {
+                    System.out.println("Sorry, I don't understand! Please try again with the format \"mark x\" " +
+                            "or \"unmark x\" " + "to mark/unmark task number x!");
+                } else if (words.length == 1) {
+                    System.out.println("Sorry, please try again! Do specify a number after \"mark\" or \"unmark\" :)");
+                } else { // to be added: check if words[1] is of type Integer (exception otherwise) and small enough.
+                    taskControl.toggleTaskStatus(Integer.parseInt(words[1]), words[0]);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Sorry, please provide a valid task number!");
             }
             break;
         default:
             if (taskControl.getTaskCount() < 100) {
-                taskControl.addTask(userResponse);
-            } else { // 100 items
+                try {
+                    taskControl.addTask(userResponse);
+                } catch (InvalidCommandException | EmptyTaskDescException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else { // 100 items. to be changed to exception handling
                 System.out.println("List full! Sorry :(");
             }
             break;

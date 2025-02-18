@@ -23,8 +23,11 @@ public class TaskControl {
         }
     }
 
-    public void toggleTaskStatus(int taskIndex, String status) {
+    public void toggleTaskStatus(int taskIndex, String status) throws IndexOutOfBoundsException {
         taskIndex = taskIndex - 1;
+        if (taskIndex < 0 || taskIndex >= taskCount) {
+            throw new IndexOutOfBoundsException();
+        }
         switch (status) {
         case "mark":
             if (!tasks[taskIndex].isDone) {
@@ -50,14 +53,18 @@ public class TaskControl {
         }
     }
 
-    public void addTask(String userResponse) throws InvalidCommandException {
+    public void addTask(String userResponse) throws InvalidCommandException, EmptyTaskDescException {
         // assumed tasks[] has min 1 free slot. exception handling to be added in future update
-        if (userResponse.split(" ").length < 2) {
-            throw new InvalidCommandException(userResponse);
+        String[] words = userResponse.split("\\s+", 2);
+        String taskType = words[0].toLowerCase();
+        if (words.length < 2) {
+            if (taskType.equals("deadline") || taskType.equals("todo") || taskType.equals("event")) {
+                throw new EmptyTaskDescException(taskType);
+            } else {
+                throw new InvalidCommandException(taskType);
+            }
         }
-        String taskDetails = userResponse.split(" ", 2)[1];
-        String taskType = userResponse.split(" ", 2)[0].toLowerCase();
-
+        String taskDetails = words[1];
         switch (taskType) {
         case "deadline" -> {
             System.out.println("Okay! I'll add this " + taskType + " to the list!");
