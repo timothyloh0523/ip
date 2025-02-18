@@ -11,13 +11,14 @@ public class bluey {
             try {
                 String userResponse = in.nextLine().trim();
                 if (userResponse.equals("exit") || userResponse.equals("bye")) {
-                    return;
+                    break;
                 }
                 handleResponse(userResponse, taskControl);
             } catch (InvalidCommandException e) {
                 System.out.println(e.getMessage());
             }
         }
+        System.out.println("Goodbye! See you soon :)");
     }
 
     public static void handleResponse(String userResponse, TaskControl taskControl) throws InvalidCommandException {

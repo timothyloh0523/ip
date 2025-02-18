@@ -14,7 +14,7 @@ public class TaskControl {
 
     public void printList() {
         if (taskCount == 0) {
-            System.out.println("There are no items in the list");
+            System.out.println("I have not been given any tasks! Start by creating an event, todo or deadline :)");
         } else {
             System.out.println("Here is your list!");
             for (int i = 0; i < taskCount; i++) {
@@ -58,7 +58,8 @@ public class TaskControl {
         String taskDetails = userResponse.split(" ", 2)[1];
         String taskType = userResponse.split(" ", 2)[0].toLowerCase();
 
-        if (taskType.equals("deadline")) {
+        switch (taskType) {
+        case "deadline" -> {
             System.out.println("Okay! I'll add this " + taskType + " to the list!");
             String[] taskPartition = taskDetails.split("/by", 2);
             String taskDeadline = taskPartition[1].trim();
@@ -67,15 +68,15 @@ public class TaskControl {
             System.out.println("  " + tasks[taskCount].toString());
             taskCount++;
             System.out.println("You now have " + taskCount + " tasks in the list!");
-
-        } else if (taskType.equals("todo")) {
+        }
+        case "todo" -> {
             System.out.println("Okay! I'll add this " + taskType + " to the list!");
             tasks[taskCount] = new ToDo(taskDetails);
             System.out.println("  " + tasks[taskCount].toString());
             taskCount++;
             System.out.println("You now have " + taskCount + " tasks in the list!");
-
-        } else if (taskType.equals("event")) {
+        }
+        case "event" -> {
             System.out.println("Okay! I'll add this " + taskType + " to the list!");
             String[] taskPartition = taskDetails.split("/from", 2);
             String[] taskTimings = taskPartition[1].trim().split("/to", 2);
@@ -86,8 +87,8 @@ public class TaskControl {
             System.out.println("  " + tasks[taskCount].toString());
             taskCount++;
             System.out.println("You now have " + taskCount + " tasks in the list!");
-        } else {
-            throw new InvalidCommandException(userResponse);
+        }
+        default -> throw new InvalidCommandException(userResponse);
         }
     }
 }
