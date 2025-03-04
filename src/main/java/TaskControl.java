@@ -1,10 +1,11 @@
+import java.util.ArrayList;
+
 public class TaskControl {
-    private final Task[] tasks;
+    private final ArrayList<Task> tasks;
     private int taskCount;
 
     public TaskControl() {
-        int MAX_TASKS = 100;
-        this.tasks = new Task[MAX_TASKS];
+        this.tasks = new ArrayList<>();
         taskCount = 0;
     }
 
@@ -18,7 +19,7 @@ public class TaskControl {
         } else {
             System.out.println("Here is your list!");
             for (int i = 0; i < taskCount; i++) {
-                System.out.println((i + 1) + ". " + tasks[i].toString());
+                System.out.println((i + 1) + ". " + tasks.get(i).toString());
             }
         }
     }
@@ -28,21 +29,22 @@ public class TaskControl {
         if (taskIndex < 0 || taskIndex >= taskCount) {
             throw new IndexOutOfBoundsException();
         }
+        Task currentTask = tasks.get(taskIndex);
         switch (status) {
         case "mark":
-            if (!tasks[taskIndex].isDone) {
+            if (!currentTask.isDone) {
                 System.out.println("Task number " + (taskIndex + 1) + " marked as done!");
-                tasks[taskIndex].isDone = true;
-                System.out.println("  " + tasks[taskIndex].toString());
+                currentTask.isDone = true;
+                System.out.println("  " + currentTask);
             } else {
                 System.out.println("Task already marked as done!");
             }
             break;
         case "unmark":
-            if (tasks[taskIndex].isDone) {
+            if (currentTask.isDone) {
                 System.out.println("Ok! Task number " + (taskIndex + 1) + " marked as not done yet!");
-                tasks[taskIndex].isDone = false;
-                System.out.println("[" + tasks[taskIndex].getStatusIcon() + "] " + tasks[taskIndex].description);
+                currentTask.isDone = false;
+                System.out.println("[" + currentTask.getStatusIcon() + "] " + currentTask.description);
             } else {
                 System.out.println("Task already marked as not done yet!");
             }
@@ -71,17 +73,15 @@ public class TaskControl {
             String[] taskPartition = taskDetails.split("/by", 2);
             String taskDeadline = taskPartition[1].trim();
             String taskDescription = taskPartition[0].trim();
-            tasks[taskCount] = new Deadline(taskDescription, taskDeadline);
-            System.out.println("  " + tasks[taskCount].toString());
-            taskCount++;
-            System.out.println("You now have " + taskCount + " tasks in the list!");
+            Deadline newTask = new Deadline(taskDescription, taskDeadline);
+            tasks.add(newTask);
+            System.out.println("  " + newTask);
         }
         case "todo" -> {
             System.out.println("Okay! I'll add this " + taskType + " to the list!");
-            tasks[taskCount] = new ToDo(taskDetails);
-            System.out.println("  " + tasks[taskCount].toString());
-            taskCount++;
-            System.out.println("You now have " + taskCount + " tasks in the list!");
+            ToDo newTask = new ToDo(taskDetails);
+            tasks.add(newTask);
+            System.out.println("  " + newTask);
         }
         case "event" -> {
             System.out.println("Okay! I'll add this " + taskType + " to the list!");
@@ -90,12 +90,17 @@ public class TaskControl {
             String taskFrom = taskTimings[0].trim();
             String taskTo = taskTimings[1].trim();
             String taskDescription = taskPartition[0].trim();
-            tasks[taskCount] = new Event(taskDescription, taskFrom, taskTo);
-            System.out.println("  " + tasks[taskCount].toString());
-            taskCount++;
-            System.out.println("You now have " + taskCount + " tasks in the list!");
+            Event newTask = new Event(taskDescription, taskFrom, taskTo);
+            tasks.add(newTask);
+            System.out.println("  " + newTask);
         }
         default -> throw new InvalidCommandException(userResponse);
+        }
+        taskCount++;
+        if (taskCount == 1) {
+            System.out.println("You now have " + taskCount + " task in the list!");
+        } else {
+            System.out.println("You now have " + taskCount + " tasks in the list!");
         }
     }
 }

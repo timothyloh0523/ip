@@ -13,11 +13,6 @@ public class bluey {
                     break;
                 }
                 handleResponse(userResponse, taskControl);
-//            } catch (InvalidCommandException e) {
-//                System.out.println(e.getMessage());
-////            } catch (ArrayIndexOutOfBoundsException e) {
-//
-//            }
         }
         System.out.println("Goodbye! See you soon :)");
     }
@@ -44,14 +39,10 @@ public class bluey {
             }
             break;
         default:
-            if (taskControl.getTaskCount() < 100) {
-                try {
-                    taskControl.addTask(userResponse);
-                } catch (InvalidCommandException | EmptyTaskDescException e) {
-                    System.out.println(e.getMessage());
-                }
-            } else { // 100 items. to be changed to exception handling
-                System.out.println("List full! Sorry :(");
+            try {
+                taskControl.addTask(userResponse);
+            } catch (InvalidCommandException | EmptyTaskDescException e) {
+                System.out.println(e.getMessage());
             }
             break;
         }
