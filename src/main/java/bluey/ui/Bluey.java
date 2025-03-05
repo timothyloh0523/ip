@@ -1,6 +1,10 @@
+package bluey.ui;
+
+import bluey.task.TaskControl;
+import bluey.exception.*;
 import java.util.Scanner;
 
-public class bluey {
+public class Bluey {
     public static void main(String[] args) {
         System.out.println("Hello! I'm bluey!");
         System.out.println("What can I do for you?\n");
@@ -8,11 +12,11 @@ public class bluey {
         TaskControl taskControl = new TaskControl();
         Scanner in = new Scanner(System.in);
         while (true) {
-                String userResponse = in.nextLine().trim();
-                if (userResponse.equals("exit") || userResponse.equals("bye")) {
-                    break;
-                }
-                handleResponse(userResponse, taskControl);
+            String userResponse = in.nextLine().trim();
+            if (userResponse.equals("exit") || userResponse.equals("bye")) {
+                break;
+            }
+            handleResponse(userResponse, taskControl);
         }
         System.out.println("Goodbye! See you soon :)");
     }
@@ -24,6 +28,7 @@ public class bluey {
             taskControl.printList();
             break;
         case "mark":
+            // intentional fallthrough
         case "unmark": // exception handling to be added and reformatted in the future.
             try {
                 if (words.length > 2) {

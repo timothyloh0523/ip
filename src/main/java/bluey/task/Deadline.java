@@ -1,3 +1,5 @@
+package bluey.task;
+
 public class Deadline extends Task {
 
     protected String taskDeadline;

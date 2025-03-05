@@ -1,4 +1,7 @@
+package bluey.task;
+
 import java.util.ArrayList;
+import bluey.exception.*;
 
 public class TaskControl {
     private final ArrayList<Task> tasks;
@@ -102,5 +105,13 @@ public class TaskControl {
         } else {
             System.out.println("You now have " + taskCount + " tasks in the list!");
         }
+    }
+
+    public void deleteTask(int taskIndex) throws IndexOutOfBoundsException {
+        taskIndex = taskIndex - 1;
+        if (taskIndex < 0 || taskIndex >= taskCount) {
+            throw new IndexOutOfBoundsException();
+        }
+
     }
 }
