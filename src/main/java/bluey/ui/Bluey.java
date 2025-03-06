@@ -27,22 +27,22 @@ public class Bluey {
         String[] words = userResponse.split("\\s+",2);
         switch (words[0]) {
         case "list":
-            taskControl.printList();
+            try {
+                taskControl.printList();
+            } catch (EmptyListException e) {
+                System.out.println(e.getMessage());
+            }
             break;
         case "mark":
             // Fallthrough
         case "unmark": // exception handling to be added and reformatted in the future.
             try {
-                if (words.length == 1) {
-                    System.out.println("Sorry, please try again! Do specify a number after \"mark\" or \"unmark\" :)");
-                } else if (words[1].contains(" ")) {
-                    System.out.println("Sorry, I don't understand! Please try again with the format \"mark x\" " +
-                            "or \"unmark x\" " + "to mark/unmark task number x!");
-                } else { // to be added: check if words[1] is of type Integer (exception otherwise) and small enough.
-                    taskControl.toggleTaskStatus(Integer.parseInt(words[1]), words[0]);
-                }
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Sorry, please provide a valid task number!");
+                int taskIndex = Integer.parseInt(words[1]);
+                taskControl.toggleTaskStatus(taskIndex, words[0]);
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                System.out.println("Sorry, please provide a valid task number to delete!");
+            } catch (EmptyListException e) {
+                System.out.println(e.getMessage());
             }
             break;
         case "delete":
@@ -50,7 +50,7 @@ public class Bluey {
                 int taskIndex = Integer.parseInt(words[1]);
                 taskControl.deleteTask(taskIndex);
             } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                System.out.println("Sorry, please provide a valid task number!");
+                System.out.println("Sorry, please provide a valid task number to delete!");
             } catch (EmptyListException e) {
                 System.out.println(e.getMessage());
             }

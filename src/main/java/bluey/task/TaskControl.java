@@ -19,9 +19,9 @@ public class TaskControl {
         return taskCount;
     }
 
-    public void printList() {
+    public void printList() throws EmptyListException {
         if (taskCount == 0) {
-            System.out.println("I have not been given any tasks! Start by creating an event, todo or deadline :)");
+            throw new EmptyListException();
         } else {
             System.out.println("Here is your list!");
             for (int i = 0; i < taskCount; i++) {
@@ -30,7 +30,10 @@ public class TaskControl {
         }
     }
 
-    public void toggleTaskStatus(int taskIndex, String status) throws IndexOutOfBoundsException {
+    public void toggleTaskStatus(int taskIndex, String status) throws IndexOutOfBoundsException, EmptyListException {
+        if (taskCount == 0) {
+            throw new EmptyListException();
+        }
         taskIndex = taskIndex - 1;
         if (taskIndex < 0 || taskIndex >= taskCount) {
             throw new IndexOutOfBoundsException();
@@ -39,7 +42,7 @@ public class TaskControl {
         switch (status) {
         case "mark":
             if (!currentTask.isDone) {
-                System.out.println("Task number " + (taskIndex + 1) + " marked as done!");
+                System.out.println("Ok! Task number " + (taskIndex + 1) + " marked as done!");
                 currentTask.isDone = true;
                 System.out.println("  " + currentTask);
             } else {
@@ -50,7 +53,7 @@ public class TaskControl {
             if (currentTask.isDone) {
                 System.out.println("Ok! Task number " + (taskIndex + 1) + " marked as not done yet!");
                 currentTask.isDone = false;
-                System.out.println("[" + currentTask.getStatusIcon() + "] " + currentTask.description);
+                System.out.println("  " + currentTask);
             } else {
                 System.out.println("Task already marked as not done yet!");
             }
