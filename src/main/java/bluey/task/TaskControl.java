@@ -1,7 +1,8 @@
 package bluey.task;
 
 import java.util.ArrayList;
-import bluey.exception.*;
+import bluey.exception.InvalidCommandException;
+import bluey.exception.EmptyTaskDescException;
 
 public class TaskControl {
     private final ArrayList<Task> tasks;
@@ -59,7 +60,6 @@ public class TaskControl {
     }
 
     public void addTask(String userResponse) throws InvalidCommandException, EmptyTaskDescException {
-        // assumed tasks[] has min 1 free slot. exception handling to be added in future update
         String[] words = userResponse.split("\\s+", 2);
         String taskType = words[0].toLowerCase();
         if (words.length < 2) {
@@ -112,6 +112,10 @@ public class TaskControl {
         if (taskIndex < 0 || taskIndex >= taskCount) {
             throw new IndexOutOfBoundsException();
         }
-
+        taskCount--;
+        System.out.println("Okay! I've deleted this task from the list!");
+        System.out.println("  " + tasks.get(taskIndex));
+        System.out.println("You now have " + taskCount + " tasks in the list!");
+        tasks.remove(taskIndex);
     }
 }

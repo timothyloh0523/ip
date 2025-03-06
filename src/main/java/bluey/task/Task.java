@@ -16,5 +16,4 @@ public class Task {
     public String toString() {
         return description;
     }
-
 }

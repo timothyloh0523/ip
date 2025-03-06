@@ -1,7 +1,8 @@
 package bluey.ui;
 
 import bluey.task.TaskControl;
-import bluey.exception.*;
+import bluey.exception.InvalidCommandException;
+import bluey.exception.EmptyTaskDescException;
 import java.util.Scanner;
 
 public class Bluey {
@@ -22,24 +23,32 @@ public class Bluey {
     }
 
     public static void handleResponse(String userResponse, TaskControl taskControl) {
-        String[] words = userResponse.split("\\s+");
+        String[] words = userResponse.split("\\s+",2);
         switch (words[0]) {
         case "list":
             taskControl.printList();
             break;
         case "mark":
-            // intentional fallthrough
+            // Fallthrough
         case "unmark": // exception handling to be added and reformatted in the future.
             try {
-                if (words.length > 2) {
+                if (words.length == 1) {
+                    System.out.println("Sorry, please try again! Do specify a number after \"mark\" or \"unmark\" :)");
+                } else if (words[1].contains(" ")) {
                     System.out.println("Sorry, I don't understand! Please try again with the format \"mark x\" " +
                             "or \"unmark x\" " + "to mark/unmark task number x!");
-                } else if (words.length == 1) {
-                    System.out.println("Sorry, please try again! Do specify a number after \"mark\" or \"unmark\" :)");
                 } else { // to be added: check if words[1] is of type Integer (exception otherwise) and small enough.
                     taskControl.toggleTaskStatus(Integer.parseInt(words[1]), words[0]);
                 }
             } catch (IndexOutOfBoundsException e) {
+                System.out.println("Sorry, please provide a valid task number!");
+            }
+            break;
+        case "delete":
+            try {
+                int taskIndex = Integer.parseInt(words[1]);
+                taskControl.deleteTask(taskIndex);
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 System.out.println("Sorry, please provide a valid task number!");
             }
             break;
