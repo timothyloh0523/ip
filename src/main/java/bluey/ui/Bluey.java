@@ -3,6 +3,7 @@ package bluey.ui;
 import bluey.task.TaskControl;
 import bluey.exception.InvalidCommandException;
 import bluey.exception.EmptyTaskDescException;
+import bluey.exception.EmptyListException;
 import java.util.Scanner;
 
 public class Bluey {
@@ -50,6 +51,8 @@ public class Bluey {
                 taskControl.deleteTask(taskIndex);
             } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 System.out.println("Sorry, please provide a valid task number!");
+            } catch (EmptyListException e) {
+                System.out.println(e.getMessage());
             }
             break;
         default:

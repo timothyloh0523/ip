@@ -1,6 +1,8 @@
 package bluey.task;
 
 import java.util.ArrayList;
+
+import bluey.exception.EmptyListException;
 import bluey.exception.InvalidCommandException;
 import bluey.exception.EmptyTaskDescException;
 
@@ -107,7 +109,10 @@ public class TaskControl {
         }
     }
 
-    public void deleteTask(int taskIndex) throws IndexOutOfBoundsException {
+    public void deleteTask(int taskIndex) throws IndexOutOfBoundsException, EmptyListException {
+        if (taskCount == 0) {
+            throw new EmptyListException();
+        }
         taskIndex = taskIndex - 1;
         if (taskIndex < 0 || taskIndex >= taskCount) {
             throw new IndexOutOfBoundsException();
