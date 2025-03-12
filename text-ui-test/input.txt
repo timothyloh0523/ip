@@ -1,0 +1,20 @@
+abcdefg
+list
+todo chicken
+list
+delete 2
+delete asdfghjkl
+event read book /from 3pm /to 6pm
+list
+deadline chicken /by 1pm
+list
+unmark 1
+mark 1
+list
+mark 1
+unmark 1
+delete 2
+list
+delete 2
+mark 1
+exit
