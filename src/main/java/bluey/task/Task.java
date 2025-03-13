@@ -9,8 +9,16 @@ public class Task {
         this.isDone = false;
     }
 
+    public void setIsDone(boolean isDone) {
+        this.isDone = isDone;
+    }
+
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String toString() {

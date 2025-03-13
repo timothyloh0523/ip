@@ -4,14 +4,20 @@ public class BlueyException extends Exception {
 
     private static final String EMPTY_LIST_MESSAGE = "I have not been given any tasks! Start by creating an event, todo or deadline :)";
     private static final String INVALID_COMMAND_MESSAGE = "Sorry! I do not understand the command you entered! Please try again :)";
+    private static final String INVALID_TASK_TYPE_MESSAGE = "Oops! Please provide a valid task type - todo, event or deadline!";
     private static final String MISSING_TASK_NUMBER_MESSAGE = "Sorry, please try again by adding a space and a number after your command :)";
 
     public BlueyException(String message) {
         super(message);
     }
 
-    public static void invalidCommandException() throws BlueyException {
-        throw new BlueyException(INVALID_COMMAND_MESSAGE);
+    public static void invalidCommandException(String errorType) throws BlueyException {
+        switch (errorType) {
+        case "INVALID_TASK_TYPE":
+            throw new BlueyException(INVALID_TASK_TYPE_MESSAGE);
+        default:
+            throw new BlueyException(INVALID_COMMAND_MESSAGE);
+        }
     }
 
     public static void invalidTaskNumException(String errorType) throws BlueyException {

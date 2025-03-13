@@ -78,7 +78,7 @@ public class TaskControl {
                 if (taskType.equals("deadline") || taskType.equals("todo") || taskType.equals("event")) {
                     BlueyException.invalidTaskNumException("MISSING_NUMBER");
                 } else {
-                    BlueyException.invalidCommandException();
+                    BlueyException.invalidCommandException("DEFAULT");
                 }
             }
             String taskDetails = words[1];
@@ -109,7 +109,7 @@ public class TaskControl {
                 tasks.add(newTask);
                 System.out.println("  " + newTask);
             }
-            default -> BlueyException.invalidCommandException();
+            default -> BlueyException.invalidCommandException("DEFAULT");
             }
             taskCount++;
             if (taskCount == 1) {
