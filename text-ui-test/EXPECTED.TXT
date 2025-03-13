@@ -1,7 +1,7 @@
 Hello! I'm bluey!
 What can I do for you?
 
-Sorry! I do not understand the command "abcdefg"! Please try again :)
+Sorry! I do not understand the command you entered! Please try again :)
 I have not been given any tasks! Start by creating an event, todo or deadline :)
 Okay! I'll add this todo to the list!
   [T][ ] chicken
