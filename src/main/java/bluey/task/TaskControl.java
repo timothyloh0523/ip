@@ -139,4 +139,36 @@ public class TaskControl {
             System.out.println("Sorry, please provide a valid task number to delete!");
         }
     }
+
+    public void find(String userResponse) {
+        try {
+            if (tasks.isEmpty()) {
+                BlueyException.listException("EMPTY_LIST");
+            }
+
+            String[] words = userResponse.split("\\s+", 2);
+            if (words.length < 2) {
+                BlueyException.invalidTaskNumException("MISSING_NUMBER");
+            }
+
+            String searchTerm = words[1].trim();
+            if (searchTerm.contains(" ")) {
+                BlueyException.invalidCommandException("MULTI_WORD_SEARCH_STRING");
+            }
+
+            boolean foundWord = false;
+            System.out.println("Okay, here is your list of matching tasks:");
+            for (int i = 0; i < tasks.size(); i++) {
+                if (tasks.get(i).description.contains(searchTerm)) {
+                    foundWord = true;
+                    System.out.println((i + 1) + ". " + tasks.get(i).toString());
+                }
+            }
+            if (!foundWord) {
+                System.out.println("(no matching task found!)");
+            }
+        } catch (BlueyException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
