@@ -40,6 +40,9 @@ public class Bluey {
         case "delete":
             taskControl.deleteTask(userResponse);
             break;
+        case "find":
+            taskControl.find(userResponse);
+            break;
         default:
             taskControl.addTask(userResponse);
             break;
