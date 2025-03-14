@@ -1,5 +1,11 @@
 package bluey.task;
 
+/*
+ * The Deadline class represents a task type, with an additional deadline.
+ * @param description Name of task.
+ * @param taskDeadline Due date of task.
+ */
+
 public class Deadline extends Task {
 
     protected String taskDeadline;

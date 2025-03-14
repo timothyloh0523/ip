@@ -3,6 +3,11 @@ package bluey.ui;
 import bluey.task.Deadline;
 import bluey.task.Event;
 
+/*
+ * The Parser class contains several functions to help break down
+ * the user's response into pieces of information that the program understands.
+ */
+
 public class Parser {
     public static String parseFirstWord(String string) {
         String[] words = string.split("\\s+",2);

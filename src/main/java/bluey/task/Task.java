@@ -1,5 +1,11 @@
 package bluey.task;
 
+/*
+ * The Task class represents a task that the user wishes to record.
+ * @param description Name of task
+ * @param isDone Boolean variable stating whether the task has been completed.
+ */
+
 public class Task {
     protected String description;
     protected boolean isDone;

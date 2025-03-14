@@ -13,6 +13,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/*
+ * The Storage class helps to save an ArrayList of tasks whenever
+ * it is changed, or when the program shuts down.
+ * It also loads this saved list upon the startup of the program.
+ */
+
 public class Storage {
     private final String filePath;
     public Storage(String filePath) {
@@ -20,8 +26,9 @@ public class Storage {
     }
 
     /**
-     * Loads tasks from the file into an ArrayList.
-     * If the file does not exist, it creates an empty list.
+     * Loads previously saved tasks from the filePath into an ArrayList.
+     * If the file does not exist, an empty list is created.
+     * @return ArrayList of Tasks.
      */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -48,6 +55,13 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Loads previously saved tasks from the filePath into an ArrayList.
+     * If the file does not exist, an empty list is created.
+     * @param file File to be loaded from.
+     * @param tasks ArrayList of tasks to be returned in the main load function.
+     * @throws FileNotFoundException if there is an error finding the file.
+     */
     public void loadTasks(File file, ArrayList<Task> tasks) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
         while (scanner.hasNext()) {
@@ -84,7 +98,7 @@ public class Storage {
                 } else if (task instanceof Event) {
                     filewriter.write("E | " + task.getStatusIcon() + " | " + task.getDescription() + " | " + ((Event) task).getFrom() + " | " + ((Event) task).getTo() + "\n");
                 } else {
-                    BlueyException.invalidCommandException("INVALID_TASK_TYPE");
+                    BlueyException.InvalidCommandException("INVALID_TASK_TYPE");
                 }
             }
             filewriter.close();
