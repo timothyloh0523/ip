@@ -2,6 +2,11 @@ package bluey.ui;
 
 import bluey.task.Task;
 
+/*
+ * The Printer class contains several functions that return a program command as a
+ * readable printed output to the user.
+ */
+
 public class Printer {
 
     public void printHello() {

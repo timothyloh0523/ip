@@ -1,5 +1,12 @@
 package bluey.task;
 
+/*
+ * The Event class represents a task type, with an additional start and end time.
+ * @param description Name of task.
+ * @param from Time when event starts.
+ * @param to Time when event ends.
+ */
+
 public class Event extends Task {
 
     protected String from;

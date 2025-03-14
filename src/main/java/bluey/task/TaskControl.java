@@ -6,6 +6,11 @@ import bluey.exception.BlueyException;
 import bluey.ui.Parser;
 import bluey.ui.Printer;
 
+/**
+ * Contains the functions required to perform operations on or using the task list
+ * as specified by user commands
+ */
+
 public class TaskControl {
     private final ArrayList<Task> tasks;
     private final Storage storage;
@@ -19,10 +24,14 @@ public class TaskControl {
         tasks.addAll(storage.load());
     }
 
+    /**
+     * Prints the list of all current tasks in the format below (curved brackets are placeholders).
+     * (tasknumber). [task type] [X if marked done] (task description)
+     */
     public void printList() {
         try {
             if (tasks.isEmpty()) {
-                BlueyException.emptyListException();
+                BlueyException.EmptyListException();
             } else {
                 System.out.println("Here is your list!");
                 for (int i = 0; i < tasks.size(); i++) {
@@ -34,11 +43,18 @@ public class TaskControl {
         }
     }
 
+    /**
+     * Attempts to mark or unmark the specified task in the user's response.
+     * Does nothing and returns a message if the task's status (marked/unmarked) remains unchanged,
+     * for example if user tries to mark an already-marked task.
+     * @param userResponse User's response
+     * @param status Whether user wants to Mark or Unmark the task.
+     */
     public void toggleTaskStatus(String userResponse, String status) {
         try {
             int taskIndex = Parser.parseTaskNumber(userResponse);
             if (tasks.isEmpty()) {
-                BlueyException.emptyListException();
+                BlueyException.EmptyListException();
             }
             if (taskIndex < 0 || taskIndex >= tasks.size()) {
                 throw new IndexOutOfBoundsException();
@@ -52,7 +68,7 @@ public class TaskControl {
                 unmarkTask(currentTask, taskIndex);
                 break;
             default:
-                BlueyException.invalidCommandException("INVALID_TOGGLE_STATUS");
+                BlueyException.InvalidCommandException("INVALID_TOGGLE_STATUS");
                 break;
             }
             storage.save(tasks);
@@ -63,6 +79,11 @@ public class TaskControl {
         }
     }
 
+    /**
+     * Helper function for toggleTaskStatus, to mark a task as done (if not already).
+     * @param currentTask Task that user wishes to mark
+     * @param taskIndex Task number that user wishes to mark
+     */
     public void markTask(Task currentTask, int taskIndex) {
         if (!currentTask.isDone) {
             System.out.println("Ok! Task number " + (taskIndex + 1) + " marked as done!");
@@ -73,6 +94,11 @@ public class TaskControl {
         }
     }
 
+    /**
+     * Helper function for toggleTaskStatus, to unmark a task as done (if not already).
+     * @param currentTask Task that user wishes to unmark
+     * @param taskIndex Task number that user wishes to unmark
+     */
     public void unmarkTask(Task currentTask, int taskIndex) {
         if (currentTask.isDone) {
             System.out.println("Ok! Task number " + (taskIndex + 1) + " marked as not done yet!");
@@ -83,14 +109,19 @@ public class TaskControl {
         }
     }
 
+    /**
+     * Adds a new task to the list of tasks, as specified in the user's response.
+     * @param userResponse User's response
+     * @param taskType Whether the task's type is Deadline, Event, or ToDo, as specified by the user
+     */
     public void addTask(String userResponse, String taskType) {
         try {
             String[] words = userResponse.split("\\s+", 2);
             if (words.length < 2) {
                 if (taskType.equals("deadline") || taskType.equals("todo") || taskType.equals("event")) {
-                    BlueyException.missingNumberException();
+                    BlueyException.MissingNumberException();
                 } else {
-                    BlueyException.invalidCommandException("DEFAULT");
+                    BlueyException.InvalidCommandException("DEFAULT");
                 }
             }
             String taskDetails = words[1];
@@ -113,7 +144,7 @@ public class TaskControl {
                 tasks.add(newTask);
                 System.out.println("  " + newTask);
             }
-            default -> BlueyException.invalidCommandException("DEFAULT");
+            default -> BlueyException.InvalidCommandException("DEFAULT");
             }
             System.out.println("You now have " + tasks.size() + " task" + (tasks.size() == 1 ? "" : "s") + " in the list!");
             storage.save(tasks);
@@ -122,10 +153,16 @@ public class TaskControl {
         }
     }
 
+    /**
+     * Deletes an existing task from the list of tasks, as specified in the user's response.
+     * @param userResponse User's response, in the form "delete (task number)"
+     * @throws IndexOutOfBoundsException If the user-specified task number is not positive,
+     * or larger than the number of existing tasks
+     */
     public void deleteTask(String userResponse) throws IndexOutOfBoundsException {
         try {
             if (tasks.isEmpty()) {
-                BlueyException.emptyListException();
+                BlueyException.EmptyListException();
             }
             String[] words = userResponse.split("\\s+", 2);
             int taskIndex = Integer.parseInt(words[1]);
@@ -145,20 +182,24 @@ public class TaskControl {
         }
     }
 
+    /**
+     * Finds and lists out all tasks in the list containing the word specified by the user.
+     * @param userResponse User's response
+     */
     public void find(String userResponse) {
         try {
             if (tasks.isEmpty()) {
-                BlueyException.emptyListException();
+                BlueyException.EmptyListException();
             }
 
             String[] words = userResponse.split("\\s+", 2);
             if (words.length < 2) {
-                BlueyException.missingNumberException();
+                BlueyException.MissingNumberException();
             }
 
             String searchTerm = words[1].trim();
             if (searchTerm.contains(" ")) {
-                BlueyException.invalidCommandException("MULTI_WORD_SEARCH_STRING");
+                BlueyException.InvalidCommandException("MULTI_WORD_SEARCH_STRING");
             }
 
             boolean foundWord = false;

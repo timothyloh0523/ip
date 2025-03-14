@@ -3,7 +3,17 @@ package bluey.command;
 import bluey.task.TaskControl;
 import bluey.ui.Parser;
 
+/**
+ * Interprets the user's input and redirects the program to the appropriate taskControl functions required.
+ */
+
 public class CommandHandler {
+
+    /**
+     * Function to handle the input command.
+     * @param userResponse User input string, taken exactly character for character
+     * @param taskControl Task control class to receive the interpreted commands.
+     */
     public static void handleCommand(String userResponse, TaskControl taskControl) {
         String command = Parser.parseFirstWord(userResponse);
         switch (command) {

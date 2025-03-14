@@ -1,5 +1,10 @@
 package bluey.exception;
 
+/**
+ * The BlueyException class holds all custom-created exceptions specific to this project.
+ * The exceptions thrown include various invalidCommandExceptions, missingNumber, emptyList and fileAlreadyExists exceptions.
+ */
+
 public class BlueyException extends Exception {
 
     private static final String EMPTY_LIST_MESSAGE = "I have not been given any tasks! Start by creating an event, todo or deadline :)";
@@ -14,7 +19,7 @@ public class BlueyException extends Exception {
         super(message);
     }
 
-    public static void invalidCommandException(String errorType) throws BlueyException {
+    public static void InvalidCommandException(String errorType) throws BlueyException {
         switch (errorType) {
         case "INVALID_TASK_TYPE":
             throw new BlueyException(INVALID_TASK_TYPE_MESSAGE);
@@ -27,11 +32,11 @@ public class BlueyException extends Exception {
         }
     }
 
-    public static void missingNumberException() throws BlueyException {
+    public static void MissingNumberException() throws BlueyException {
         throw new BlueyException(MISSING_TASK_NUMBER_MESSAGE);
     }
 
-    public static void emptyListException() throws BlueyException {
+    public static void EmptyListException() throws BlueyException {
         throw new BlueyException(EMPTY_LIST_MESSAGE);
     }
 
