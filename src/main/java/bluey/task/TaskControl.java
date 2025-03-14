@@ -1,29 +1,27 @@
 package bluey.task;
 
 import java.util.ArrayList;
-
+import bluey.storage.Storage;
 import bluey.exception.BlueyException;
 
 public class TaskControl {
     private final ArrayList<Task> tasks;
-    private int taskCount;
+    private final Storage storage;
 
-    public TaskControl() {
+    public TaskControl(Storage storage) {
+        this.storage = storage;
         this.tasks = new ArrayList<>();
-        taskCount = 0;
-    }
 
-    public int getTaskCount() {
-        return taskCount;
+        tasks.addAll(storage.load());
     }
 
     public void printList() {
         try {
-            if (taskCount == 0) {
+            if (tasks.isEmpty()) {
                 BlueyException.listException("EMPTY_LIST");
             } else {
                 System.out.println("Here is your list!");
-                for (int i = 0; i < taskCount; i++) {
+                for (int i = 0; i < tasks.size(); i++) {
                     System.out.println((i + 1) + ". " + tasks.get(i).toString());
                 }
             }
@@ -34,11 +32,11 @@ public class TaskControl {
 
     public void toggleTaskStatus(int taskIndex, String status) throws IndexOutOfBoundsException {
         try {
-            if (taskCount == 0) {
+            if (tasks.isEmpty()) {
                 BlueyException.listException("EMPTY_LIST");
             }
             taskIndex = taskIndex - 1;
-            if (taskIndex < 0 || taskIndex >= taskCount) {
+            if (taskIndex < 0 || taskIndex >= tasks.size()) {
                 throw new IndexOutOfBoundsException();
             }
             Task currentTask = tasks.get(taskIndex);
@@ -65,6 +63,7 @@ public class TaskControl {
                 System.out.println("Error! Unrecognised task status: " + status);
                 break;
             }
+            storage.save(tasks);
         } catch (BlueyException e) {
             System.out.println(e.getMessage());
         }
@@ -111,12 +110,8 @@ public class TaskControl {
             }
             default -> BlueyException.invalidCommandException("DEFAULT");
             }
-            taskCount++;
-            if (taskCount == 1) {
-                System.out.println("You now have " + taskCount + " task in the list!");
-            } else {
-                System.out.println("You now have " + taskCount + " tasks in the list!");
-            }
+            System.out.println("You now have " + tasks.size() + " task" + (tasks.size() == 1 ? "" : "s") + " in the list!");
+            storage.save(tasks);
         } catch (BlueyException e) {
             System.out.println(e.getMessage());
         }
@@ -124,20 +119,20 @@ public class TaskControl {
 
     public void deleteTask(String userResponse) throws IndexOutOfBoundsException {
         try {
-            if (taskCount == 0) {
+            if (tasks.isEmpty()) {
                 BlueyException.listException("EMPTY_LIST");
             }
             String[] words = userResponse.split("\\s+", 2);
             int taskIndex = Integer.parseInt(words[1]);
             taskIndex = taskIndex - 1;
-            if (taskIndex < 0 || taskIndex >= taskCount) {
+            if (taskIndex < 0 || taskIndex >= tasks.size()) {
                 throw new IndexOutOfBoundsException();
             }
-            taskCount--;
             System.out.println("Okay! I've deleted this task from the list!");
             System.out.println("  " + tasks.get(taskIndex));
-            System.out.println("You now have " + taskCount + " tasks in the list!");
             tasks.remove(taskIndex);
+            System.out.println("You now have " + tasks.size() + " tasks in the list!");
+            storage.save(tasks);
         } catch (BlueyException e) {
             System.out.println(e.getMessage());
         } catch (IndexOutOfBoundsException | NumberFormatException e) {

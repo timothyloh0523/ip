@@ -23,18 +23,32 @@ public class Storage {
      * Loads tasks from the file into an ArrayList.
      * If the file does not exist, it creates an empty list.
      */
-    public ArrayList<Task> load() throws IOException, FileNotFoundException {
+    public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
         if (!file.exists()) {
             try {
-                file.createNewFile();
+                boolean isFileCreated = file.createNewFile();
+                if (!isFileCreated) {
+                    BlueyException.fileAlreadyExistsException();
+                }
                 return tasks;
             } catch (IOException e) {
                 System.out.println("Sorry! There was an error when creating the file. Please try again!");
+            } catch (BlueyException e) {
+                System.out.println(e.getMessage());
             }
         }
+        try {
+            loadTasks(file, tasks);
+        } catch (FileNotFoundException e) {
+            System.out.println("Sorry! I could not find the file :(");
+        }
+        System.out.println("I've loaded your saved tasks!");
+        return tasks;
+    }
 
+    public void loadTasks(File file, ArrayList<Task> tasks) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
         while (scanner.hasNext()) {
             String task = scanner.nextLine();
@@ -57,10 +71,9 @@ public class Storage {
                 break;
             }
         }
-        return tasks;
     }
 
-    public void save(ArrayList<Task> tasks) throws IOException, BlueyException {
+    public void save(ArrayList<Task> tasks) {
         try {
             FileWriter filewriter = new FileWriter(filePath);
             for (Task task : tasks) {

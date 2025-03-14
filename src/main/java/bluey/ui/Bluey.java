@@ -1,14 +1,15 @@
 package bluey.ui;
 
 import bluey.task.TaskControl;
+import bluey.storage.Storage;
 import java.util.Scanner;
 
 public class Bluey {
     public static void main(String[] args) {
+        Storage storage = new Storage("data.txt");
         System.out.println("Hello! I'm bluey!");
-        System.out.println("What can I do for you?\n");
-
-        TaskControl taskControl = new TaskControl();
+        System.out.println("What can I do for you?");
+        TaskControl taskControl = new TaskControl(storage);
         Scanner in = new Scanner(System.in);
         while (true) {
             String userResponse = in.nextLine().trim();
