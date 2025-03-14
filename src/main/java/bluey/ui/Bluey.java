@@ -1,17 +1,15 @@
 package bluey.ui;
 
 import bluey.task.TaskControl;
-import bluey.exception.InvalidCommandException;
-import bluey.exception.EmptyTaskDescException;
-import bluey.exception.EmptyListException;
+import bluey.storage.Storage;
 import java.util.Scanner;
 
 public class Bluey {
     public static void main(String[] args) {
+        Storage storage = new Storage("data.txt");
         System.out.println("Hello! I'm bluey!");
-        System.out.println("What can I do for you?\n");
-
-        TaskControl taskControl = new TaskControl();
+        System.out.println("What can I do for you?");
+        TaskControl taskControl = new TaskControl(storage);
         Scanner in = new Scanner(System.in);
         while (true) {
             String userResponse = in.nextLine().trim();
@@ -27,11 +25,7 @@ public class Bluey {
         String[] words = userResponse.split("\\s+",2);
         switch (words[0]) {
         case "list":
-            try {
-                taskControl.printList();
-            } catch (EmptyListException e) {
-                System.out.println(e.getMessage());
-            }
+            taskControl.printList();
             break;
         case "mark":
             // Fallthrough
@@ -41,26 +35,13 @@ public class Bluey {
                 taskControl.toggleTaskStatus(taskIndex, words[0]);
             } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 System.out.println("Sorry, please provide a valid task number to delete!");
-            } catch (EmptyListException e) {
-                System.out.println(e.getMessage());
             }
             break;
         case "delete":
-            try {
-                int taskIndex = Integer.parseInt(words[1]);
-                taskControl.deleteTask(taskIndex);
-            } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                System.out.println("Sorry, please provide a valid task number to delete!");
-            } catch (EmptyListException e) {
-                System.out.println(e.getMessage());
-            }
+            taskControl.deleteTask(userResponse);
             break;
         default:
-            try {
-                taskControl.addTask(userResponse);
-            } catch (InvalidCommandException | EmptyTaskDescException e) {
-                System.out.println(e.getMessage());
-            }
+            taskControl.addTask(userResponse);
             break;
         }
     }
