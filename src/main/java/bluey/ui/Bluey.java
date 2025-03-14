@@ -2,50 +2,36 @@ package bluey.ui;
 
 import bluey.task.TaskControl;
 import bluey.storage.Storage;
+import bluey.command.CommandHandler;
 import java.util.Scanner;
 
 public class Bluey {
-    public static void main(String[] args) {
-        Storage storage = new Storage("data.txt");
-        System.out.println("Hello! I'm bluey!");
-        System.out.println("What can I do for you?");
-        TaskControl taskControl = new TaskControl(storage);
-        Scanner in = new Scanner(System.in);
-        while (true) {
-            String userResponse = in.nextLine().trim();
-            if (userResponse.equals("exit") || userResponse.equals("bye")) {
-                break;
-            }
-            handleResponse(userResponse, taskControl);
-        }
-        System.out.println("Goodbye! See you soon :)");
+
+    private final Printer printer;
+    private final TaskControl taskControl;
+
+    public Bluey(String filePath) {
+        Storage storage = new Storage(filePath);
+        this.taskControl = new TaskControl(storage);
+        this.printer = new Printer();
     }
 
-    public static void handleResponse(String userResponse, TaskControl taskControl) {
-        String[] words = userResponse.split("\\s+",2);
-        switch (words[0]) {
-        case "list":
-            taskControl.printList();
-            break;
-        case "mark":
-            // Fallthrough
-        case "unmark": // exception handling to be added and reformatted in the future.
-            try {
-                int taskIndex = Integer.parseInt(words[1]);
-                taskControl.toggleTaskStatus(taskIndex, words[0]);
-            } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                System.out.println("Sorry, please provide a valid task number to delete!");
+    public void run() {
+        printer.printHello();
+        Scanner in = new Scanner(System.in);
+        boolean isExit = false;
+        while (!isExit) {
+            String userResponse = in.nextLine().trim();
+            if (userResponse.equals("exit") || userResponse.equals("bye")) {
+                isExit = true;
+            } else {
+                CommandHandler.handleCommand(userResponse, taskControl);
             }
-            break;
-        case "delete":
-            taskControl.deleteTask(userResponse);
-            break;
-        case "find":
-            taskControl.find(userResponse);
-            break;
-        default:
-            taskControl.addTask(userResponse);
-            break;
         }
+        printer.printGoodbye();
+    }
+
+    public static void main(String[] args) {
+        new Bluey("data.txt").run();
     }
 }
